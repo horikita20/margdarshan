@@ -1,0 +1,2425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARADHYA - Complete AI-Powered Pilgrimage Solution</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .temple-card {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .temple-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .crowd-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .low { background-color: #10b981; }
+        .medium { background-color: #f59e0b; }
+        .high { background-color: #ef4444; }
+        
+        .notification {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .chart-bar {
+            transition: height 0.5s ease;
+        }
+        
+        .modal {
+            backdrop-filter: blur(10px);
+        }
+        
+        .cctv-feed {
+            background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
+            border: 2px solid #00ff00;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cctv-feed::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff00, transparent);
+            animation: scan 2s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .traffic-light {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 2px;
+        }
+        
+        .red-light { background-color: #ef4444; }
+        .yellow-light { background-color: #f59e0b; }
+        .green-light { background-color: #10b981; }
+        
+        .weather-widget {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+        }
+        
+        .festival-alert {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            animation: festivalPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes festivalPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes emergencyFlash {
+            0%, 100% { background-color: #dc2626; }
+            50% { background-color: #b91c1c; }
+        }
+        
+        .emergency-protocol {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            border: 2px solid #fca5a5;
+            animation: emergencyPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes emergencyPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-white rounded-lg p-1 shadow-md">
+                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                            <!-- Gujarat State Map Outline -->
+                            <path d="M20,30 L25,25 L35,20 L45,18 L55,20 L65,25 L75,30 L80,40 L85,50 L80,60 L75,70 L70,75 L60,80 L50,82 L40,80 L30,75 L25,70 L20,60 L15,50 L20,40 Z" 
+                                  fill="#ff6b35" stroke="#fff" stroke-width="2"/>
+                            <!-- Somnath Temple Location -->
+                            <circle cx="25" cy="65" r="3" fill="#ffd700" stroke="#fff" stroke-width="1"/>
+                            <!-- Dwarka Temple Location -->
+                            <circle cx="15" cy="45" r="3" fill="#ffd700" stroke="#fff" stroke-width="1"/>
+                            <!-- Ambaji Temple Location -->
+                            <circle cx="55" cy="25" r="3" fill="#ffd700" stroke="#fff" stroke-width="1"/>
+                            <!-- Pavagadh Temple Location -->
+                            <circle cx="45" cy="50" r="3" fill="#ffd700" stroke="#fff" stroke-width="1"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">ARADHYA</h1>
+                        <p class="text-blue-100">Complete AI-Powered Pilgrimage Solution</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2 flex-wrap">
+                    <button id="registerBtn" class="bg-purple-500 hover:bg-purple-600 px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        👤 Register
+                    </button>
+                    <button id="darshanFormBtn" class="bg-orange-500 hover:bg-orange-600 px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        🎫 Darshan Form
+                    </button>
+                    <button id="loginBtn" class="bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        🔐 Login
+                    </button>
+                    <button id="trafficBtn" class="bg-yellow-500 hover:bg-yellow-600 px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        🚦 Traffic
+                    </button>
+                    <button id="chatbotBtn" class="bg-green-500 hover:bg-green-600 px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        🤖 AI Chat
+                    </button>
+                    <button id="emergencyBtn" class="bg-red-500 hover:bg-red-600 px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        🚨 Emergency
+                    </button>
+                    <button id="emergencyContactsBtn" class="bg-orange-500 hover:bg-orange-600 px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        📞 Contacts
+                    </button>
+                    <div class="text-right">
+                        <div class="text-xs opacity-90">Live Status</div>
+                        <div id="currentTime" class="font-semibold text-sm"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Festival Alert Banner -->
+    <div id="festivalBanner" class="festival-alert text-white text-center py-3 px-4">
+        <div class="flex items-center justify-center space-x-2">
+            <span class="text-2xl">🎉</span>
+            <span class="font-bold">FESTIVAL ALERT: Navratri - Expected 5x crowd surge! Plan your visit accordingly.</span>
+            <button id="closeFestivalBanner" class="ml-4 text-white hover:text-gray-200">✕</button>
+        </div>
+    </div>
+
+    <!-- Emergency Crowd Surge Alert -->
+    <div id="emergencyCrowdAlert" class="bg-red-600 text-white text-center py-4 px-4 hidden" style="animation: emergencyFlash 1s infinite;">
+        <div class="flex items-center justify-center space-x-3">
+            <span class="text-3xl animate-pulse">🚨</span>
+            <div>
+                <div class="font-bold text-lg">EMERGENCY CROWD SURGE DETECTED!</div>
+                <div class="text-sm">Immediate crowd control measures activated. Please follow staff instructions.</div>
+            </div>
+            <button id="closeEmergencyAlert" class="ml-4 text-white hover:text-gray-200 text-xl">✕</button>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Weather & AI Prediction Widget -->
+        <div class="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div id="weatherWidget" class="weather-widget text-white p-6 rounded-xl shadow-lg cursor-pointer hover:shadow-xl transition-all transform hover:scale-105 relative overflow-hidden">
+                <!-- Animated Sky Background -->
+                <div class="absolute inset-0 opacity-20">
+                    <svg viewBox="0 0 400 200" class="w-full h-full">
+                        <!-- Sky gradient -->
+                        <defs>
+                            <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#98D8E8;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="400" height="200" fill="url(#skyGradient)"/>
+                        
+                        <!-- Animated clouds -->
+                        <g class="animate-pulse">
+                            <ellipse cx="80" cy="60" rx="25" ry="15" fill="white" opacity="0.8"/>
+                            <ellipse cx="95" cy="55" rx="30" ry="18" fill="white" opacity="0.7"/>
+                            <ellipse cx="110" cy="62" rx="20" ry="12" fill="white" opacity="0.8"/>
+                        </g>
+                        
+                        <g class="animate-pulse" style="animation-delay: 1s;">
+                            <ellipse cx="250" cy="80" rx="35" ry="20" fill="white" opacity="0.6"/>
+                            <ellipse cx="270" cy="75" rx="25" ry="15" fill="white" opacity="0.7"/>
+                            <ellipse cx="285" cy="82" rx="28" ry="16" fill="white" opacity="0.6"/>
+                        </g>
+                        
+                        <!-- Sun rays -->
+                        <g class="animate-spin" style="animation-duration: 20s; transform-origin: 320px 40px;">
+                            <line x1="320" y1="20" x2="320" y2="35" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                            <line x1="340" y1="25" x2="335" y2="35" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                            <line x1="345" y1="40" x2="335" y2="40" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                            <line x1="340" y1="55" x2="335" y2="45" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                            <line x1="320" y1="60" x2="320" y2="45" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                            <line x1="300" y1="55" x2="305" y2="45" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                            <line x1="295" y1="40" x2="305" y2="40" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                            <line x1="300" y1="25" x2="305" y2="35" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                        </g>
+                        
+                        <!-- Sun -->
+                        <circle cx="320" cy="40" r="15" fill="yellow" opacity="0.9"/>
+                    </svg>
+                </div>
+                
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-2xl mb-2">🌤️</div>
+                            <div class="text-lg font-bold">28°C</div>
+                            <div class="text-sm opacity-90">Partly Cloudy</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm">Humidity: 65%</div>
+                            <div class="text-sm">Wind: 12 km/h</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <div class="text-xs opacity-75">Click for detailed forecast</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="aiPredictionWidget" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-xl shadow-lg cursor-pointer hover:shadow-xl transition-all transform hover:scale-105 relative overflow-hidden">
+                <!-- Cute AI Robot Background -->
+                <div class="absolute top-2 right-2 opacity-30">
+                    <svg viewBox="0 0 100 100" class="w-16 h-16">
+                        <!-- Robot head -->
+                        <rect x="25" y="20" width="50" height="40" rx="8" fill="white" opacity="0.8"/>
+                        
+                        <!-- Robot eyes -->
+                        <circle cx="35" cy="35" r="4" fill="#4F46E5" class="animate-pulse"/>
+                        <circle cx="65" cy="35" r="4" fill="#4F46E5" class="animate-pulse" style="animation-delay: 0.5s;"/>
+                        
+                        <!-- Robot mouth -->
+                        <rect x="40" y="45" width="20" height="3" rx="2" fill="#4F46E5" opacity="0.7"/>
+                        
+                        <!-- Robot antennas -->
+                        <line x1="40" y1="20" x2="40" y2="10" stroke="white" stroke-width="2"/>
+                        <line x1="60" y1="20" x2="60" y2="10" stroke="white" stroke-width="2"/>
+                        <circle cx="40" cy="10" r="2" fill="#FFD700" class="animate-bounce"/>
+                        <circle cx="60" cy="10" r="2" fill="#FFD700" class="animate-bounce" style="animation-delay: 0.3s;"/>
+                        
+                        <!-- Robot body -->
+                        <rect x="30" y="60" width="40" height="30" rx="5" fill="white" opacity="0.6"/>
+                        
+                        <!-- Robot arms -->
+                        <rect x="15" y="65" width="15" height="8" rx="4" fill="white" opacity="0.6"/>
+                        <rect x="70" y="65" width="15" height="8" rx="4" fill="white" opacity="0.6"/>
+                        
+                        <!-- Brain waves -->
+                        <g class="animate-pulse" opacity="0.5">
+                            <path d="M 20 30 Q 25 25 30 30 Q 35 35 40 30" stroke="#FFD700" stroke-width="1.5" fill="none"/>
+                            <path d="M 60 30 Q 65 25 70 30 Q 75 35 80 30" stroke="#FFD700" stroke-width="1.5" fill="none"/>
+                        </g>
+                    </svg>
+                </div>
+                
+                <!-- Floating data particles -->
+                <div class="absolute inset-0 opacity-20">
+                    <div class="absolute top-4 left-4 w-1 h-1 bg-white rounded-full animate-ping"></div>
+                    <div class="absolute top-8 right-8 w-1 h-1 bg-white rounded-full animate-ping" style="animation-delay: 1s;"></div>
+                    <div class="absolute bottom-6 left-8 w-1 h-1 bg-white rounded-full animate-ping" style="animation-delay: 2s;"></div>
+                    <div class="absolute bottom-4 right-6 w-1 h-1 bg-white rounded-full animate-ping" style="animation-delay: 0.5s;"></div>
+                </div>
+                
+                <div class="relative z-10">
+                    <div class="text-center">
+                        <div class="text-2xl mb-2">🧠</div>
+                        <div class="text-lg font-bold">AI Prediction</div>
+                        <div class="text-sm opacity-90">Peak crowd at 2:00 PM</div>
+                        <div class="text-xs mt-2">Confidence: 94%</div>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <div class="text-xs opacity-75">Click for detailed analysis</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="liveAnalyticsWidget" class="bg-gradient-to-r from-green-500 to-teal-500 text-white p-6 rounded-xl shadow-lg cursor-pointer hover:shadow-xl transition-all transform hover:scale-105 relative overflow-hidden">
+                <!-- Animated Graph Background -->
+                <div class="absolute inset-0 opacity-20">
+                    <svg viewBox="0 0 200 100" class="w-full h-full">
+                        <!-- Grid lines -->
+                        <defs>
+                            <pattern id="grid" width="20" height="10" patternUnits="userSpaceOnUse">
+                                <path d="M 20 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5" opacity="0.3"/>
+                            </pattern>
+                        </defs>
+                        <rect width="200" height="100" fill="url(#grid)"/>
+                        
+                        <!-- Animated line chart -->
+                        <g class="animate-pulse">
+                            <polyline points="10,80 30,70 50,60 70,45 90,35 110,40 130,30 150,25 170,20 190,15" 
+                                     fill="none" stroke="white" stroke-width="2" opacity="0.8"/>
+                            
+                            <!-- Data points -->
+                            <circle cx="30" cy="70" r="2" fill="white" opacity="0.9" class="animate-ping"/>
+                            <circle cx="70" cy="45" r="2" fill="white" opacity="0.9" class="animate-ping" style="animation-delay: 0.5s;"/>
+                            <circle cx="110" cy="40" r="2" fill="white" opacity="0.9" class="animate-ping" style="animation-delay: 1s;"/>
+                            <circle cx="150" cy="25" r="2" fill="white" opacity="0.9" class="animate-ping" style="animation-delay: 1.5s;"/>
+                        </g>
+                        
+                        <!-- Bar chart -->
+                        <g opacity="0.6">
+                            <rect x="20" y="85" width="8" height="10" fill="white" class="animate-pulse"/>
+                            <rect x="35" y="75" width="8" height="20" fill="white" class="animate-pulse" style="animation-delay: 0.2s;"/>
+                            <rect x="50" y="70" width="8" height="25" fill="white" class="animate-pulse" style="animation-delay: 0.4s;"/>
+                            <rect x="65" y="60" width="8" height="35" fill="white" class="animate-pulse" style="animation-delay: 0.6s;"/>
+                            <rect x="80" y="55" width="8" height="40" fill="white" class="animate-pulse" style="animation-delay: 0.8s;"/>
+                        </g>
+                        
+                        <!-- Trending arrow -->
+                        <g class="animate-bounce" opacity="0.7">
+                            <path d="M 160 40 L 170 30 L 175 35 L 170 30 L 165 35" stroke="white" stroke-width="2" fill="none"/>
+                        </g>
+                    </svg>
+                </div>
+                
+                <!-- Floating analytics icons -->
+                <div class="absolute inset-0 opacity-15">
+                    <div class="absolute top-2 left-2 text-xs animate-pulse">📈</div>
+                    <div class="absolute top-2 right-2 text-xs animate-pulse" style="animation-delay: 1s;">📊</div>
+                    <div class="absolute bottom-2 left-2 text-xs animate-pulse" style="animation-delay: 2s;">💹</div>
+                    <div class="absolute bottom-2 right-2 text-xs animate-pulse" style="animation-delay: 0.5s;">📉</div>
+                </div>
+                
+                <div class="relative z-10">
+                    <div class="text-center">
+                        <div class="text-2xl mb-2">📊</div>
+                        <div class="text-lg font-bold">Live Analytics</div>
+                        <div class="text-sm opacity-90">12,847 visitors today</div>
+                        <div class="text-xs mt-2">↑ 23% from yesterday</div>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <div class="text-xs opacity-75">Click for full dashboard</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Temple Selection -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Select Temple Location</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="temple-card bg-white rounded-xl p-6 shadow-lg cursor-pointer border-2 border-transparent hover:border-blue-500" data-temple="somnath">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <img src="https://i.pinimg.com/736x/b3/a9/0b/b3a90bf518997ef1c9a6f1a76df58c06.jpg" alt="Somnath Temple" class="w-20 h-20 mx-auto rounded-lg object-cover shadow-md" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="text-4xl hidden">🏛️</div>
+                        </div>
+                        <h3 class="font-bold text-lg">Somnath Temple</h3>
+                        <div class="mt-3">
+                            <span class="crowd-indicator low"></span>
+                            <span class="text-sm text-green-600">Low Crowd</span>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">Wait: 15 mins</div>
+                    </div>
+                </div>
+                
+                <div class="temple-card bg-white rounded-xl p-6 shadow-lg cursor-pointer border-2 border-transparent hover:border-blue-500" data-temple="dwarka">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <img src="https://i.pinimg.com/736x/c9/b5/5d/c9b55d5b1dd68580b217de076f6cabf4.jpg" alt="Dwarka Temple" class="w-20 h-20 mx-auto rounded-lg object-cover shadow-md" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="text-4xl hidden">🏰</div>
+                        </div>
+                        <h3 class="font-bold text-lg">Dwarka Temple</h3>
+                        <div class="mt-3">
+                            <span class="crowd-indicator medium"></span>
+                            <span class="text-sm text-yellow-600">Medium Crowd</span>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">Wait: 45 mins</div>
+                    </div>
+                </div>
+                
+                <div class="temple-card bg-white rounded-xl p-6 shadow-lg cursor-pointer border-2 border-transparent hover:border-blue-500" data-temple="ambaji">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <img src="https://i.pinimg.com/736x/60/73/27/607327d4706dba1f487e47833feaeb70.jpg" alt="Ambaji Temple" class="w-20 h-20 mx-auto rounded-lg object-cover shadow-md" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="text-4xl hidden">⛰️</div>
+                        </div>
+                        <h3 class="font-bold text-lg">Ambaji Temple</h3>
+                        <div class="mt-3">
+                            <span class="crowd-indicator high"></span>
+                            <span class="text-sm text-red-600">High Crowd</span>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">Wait: 2 hours</div>
+                    </div>
+                </div>
+                
+                <div class="temple-card bg-white rounded-xl p-6 shadow-lg cursor-pointer border-2 border-transparent hover:border-blue-500" data-temple="pavagadh">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <img src="https://i.pinimg.com/736x/a0/84/ec/a084ec22fc734146162e63af9491fe41.jpg" alt="Pavagadh Temple" class="w-20 h-20 mx-auto rounded-lg object-cover shadow-md" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="text-4xl hidden">🏔️</div>
+                        </div>
+                        <h3 class="font-bold text-lg">Pavagadh Temple</h3>
+                        <div class="mt-3">
+                            <span class="crowd-indicator medium"></span>
+                            <span class="text-sm text-yellow-600">Medium Crowd</span>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">Wait: 30 mins</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Features Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column - Queue Management -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- AI Crowd Prediction -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">🤖</span>
+                        AI Crowd Prediction
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg">
+                            <div class="text-sm text-blue-600 font-semibold">Next 2 Hours</div>
+                            <div class="text-2xl font-bold text-blue-800">↗️ Increasing</div>
+                            <div class="text-xs text-blue-600">Festival rush expected</div>
+                        </div>
+                        <div class="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg">
+                            <div class="text-sm text-green-600 font-semibold">Best Visit Time</div>
+                            <div class="text-2xl font-bold text-green-800">6:00 AM</div>
+                            <div class="text-xs text-green-600">Minimal crowd expected</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Crowd Chart -->
+                    <div class="mt-6">
+                        <div class="text-sm font-semibold text-gray-600 mb-3">Today's Crowd Pattern</div>
+                        <div class="flex items-end space-x-2 h-24">
+                            <div class="chart-bar bg-green-400 w-8 rounded-t" style="height: 30%"></div>
+                            <div class="chart-bar bg-green-400 w-8 rounded-t" style="height: 20%"></div>
+                            <div class="chart-bar bg-yellow-400 w-8 rounded-t" style="height: 60%"></div>
+                            <div class="chart-bar bg-red-400 w-8 rounded-t" style="height: 90%"></div>
+                            <div class="chart-bar bg-red-400 w-8 rounded-t" style="height: 100%"></div>
+                            <div class="chart-bar bg-yellow-400 w-8 rounded-t" style="height: 70%"></div>
+                            <div class="chart-bar bg-green-400 w-8 rounded-t" style="height: 40%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-500 mt-2">
+                            <span>6AM</span><span>9AM</span><span>12PM</span><span>3PM</span><span>6PM</span><span>9PM</span><span>12AM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Smart Queue System -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">🎫</span>
+                        Smart Queue & Ticketing
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <button id="bookDarshanBtn" class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg font-semibold transition-colors">
+                            📱 Book Digital Darshan Pass
+                        </button>
+                        <button id="checkQueueBtn" class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg font-semibold transition-colors">
+                            👥 Check Queue Status
+                        </button>
+                    </div>
+                    
+                    <div id="queueInfo" class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-semibold">Current Queue Position:</span>
+                            <span class="text-2xl font-bold text-blue-600">#247</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-semibold">Estimated Wait:</span>
+                            <span class="text-lg font-bold text-orange-600">45 minutes</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-500 h-2 rounded-full" style="width: 35%"></div>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">Queue moving at normal pace</div>
+                    </div>
+                </div>
+
+                <!-- ARADHYA Transportation Services -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">🚗</span>
+                        ARADHYA Transportation
+                    </h3>
+                    
+                    <!-- Parking Status -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="text-center p-4 bg-green-50 rounded-lg">
+                            <div class="text-2xl mb-2">🅿️</div>
+                            <div class="font-semibold text-green-700">Parking A</div>
+                            <div class="text-sm text-green-600">45 spots free</div>
+                        </div>
+                        <div class="text-center p-4 bg-yellow-50 rounded-lg">
+                            <div class="text-2xl mb-2">🅿️</div>
+                            <div class="font-semibold text-yellow-700">Parking B</div>
+                            <div class="text-sm text-yellow-600">12 spots free</div>
+                        </div>
+                        <div class="text-center p-4 bg-red-50 rounded-lg">
+                            <div class="text-2xl mb-2">🅿️</div>
+                            <div class="font-semibold text-red-700">Parking C</div>
+                            <div class="text-sm text-red-600">Full</div>
+                        </div>
+                    </div>
+                    
+                    <!-- ARADHYA Transportation Services -->
+                    <div class="space-y-4">
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center">
+                                    <div class="text-2xl mr-3">🚌</div>
+                                    <div>
+                                        <div class="font-semibold text-blue-800">ARADHYA Bus Service</div>
+                                        <div class="text-sm text-blue-600">AC buses every 15 minutes • Free for pilgrims</div>
+                                    </div>
+                                </div>
+                                <button id="trackAradhyaBus" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-sm transition-colors">
+                                    Track Live
+                                </button>
+                            </div>
+                            <div class="text-xs text-blue-600">Next bus: 8 minutes • Route: Railway Station → Temple → Parking</div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-yellow-50 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="text-2xl mr-3">🚕</div>
+                                        <div>
+                                            <div class="font-semibold text-yellow-800">Ola Cabs</div>
+                                            <div class="text-sm text-yellow-600">12 cabs nearby</div>
+                                        </div>
+                                    </div>
+                                    <button id="bookOla" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-2 rounded-lg text-sm transition-colors">
+                                        Book Now
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="p-4 bg-green-50 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="text-2xl mr-3">🚖</div>
+                                        <div>
+                                            <div class="font-semibold text-green-800">Local Cabs</div>
+                                            <div class="text-sm text-green-600">8 available</div>
+                                        </div>
+                                    </div>
+                                    <button id="bookLocalCab" class="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg text-sm transition-colors">
+                                        Call Cab
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-purple-50 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="text-2xl mr-3">🛺</div>
+                                    <div>
+                                        <div class="font-semibold text-purple-800">Auto Rickshaw</div>
+                                        <div class="text-sm text-purple-600">Quick local transport • ₹20-50</div>
+                                    </div>
+                                </div>
+                                <button id="callAuto" class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-2 rounded-lg text-sm transition-colors">
+                                    Call Auto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Transportation Image Gallery -->
+                    <div class="mt-6">
+                        <h4 class="font-semibold text-gray-800 mb-4">🖼️ Transportation Services Gallery</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                <img src="YOUR_BUS_IMAGE_URL_HERE" alt="ARADHYA Bus Service" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-full h-48 bg-gradient-to-br from-blue-400 to-blue-600 hidden items-center justify-center text-white">
+                                    <div class="text-center">
+                                        <div class="text-4xl mb-2">🚌</div>
+                                        <div class="font-bold">ARADHYA Bus Service</div>
+                                        <div class="text-sm opacity-90">Free AC buses every 15 minutes</div>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                                    <div class="text-white font-semibold">ARADHYA Bus Service</div>
+                                    <div class="text-white text-sm opacity-90">Free AC buses • Every 15 minutes</div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                <img src="YOUR_PARKING_IMAGE_URL_HERE" alt="Smart Parking System" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-full h-48 bg-gradient-to-br from-green-400 to-green-600 hidden items-center justify-center text-white">
+                                    <div class="text-center">
+                                        <div class="text-4xl mb-2">🅿️</div>
+                                        <div class="font-bold">Smart Parking</div>
+                                        <div class="text-sm opacity-90">Real-time availability tracking</div>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                                    <div class="text-white font-semibold">Smart Parking System</div>
+                                    <div class="text-white text-sm opacity-90">Real-time availability • 3 zones</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                <img src="YOUR_TAXI_IMAGE_URL_HERE" alt="Taxi Services" class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-full h-32 bg-gradient-to-br from-yellow-400 to-yellow-600 hidden items-center justify-center text-white">
+                                    <div class="text-center">
+                                        <div class="text-2xl mb-1">🚕</div>
+                                        <div class="font-bold text-sm">Taxi Services</div>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2">
+                                    <div class="text-white text-sm font-semibold">Taxi Services</div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                <img src="YOUR_AUTO_IMAGE_URL_HERE" alt="Auto Rickshaw" class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-full h-32 bg-gradient-to-br from-purple-400 to-purple-600 hidden items-center justify-center text-white">
+                                    <div class="text-center">
+                                        <div class="text-2xl mb-1">🛺</div>
+                                        <div class="font-bold text-sm">Auto Rickshaw</div>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2">
+                                    <div class="text-white text-sm font-semibold">Auto Rickshaw</div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                <img src="YOUR_SHUTTLE_IMAGE_URL_HERE" alt="Shuttle Service" class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-full h-32 bg-gradient-to-br from-teal-400 to-teal-600 hidden items-center justify-center text-white">
+                                    <div class="text-center">
+                                        <div class="text-2xl mb-1">🚐</div>
+                                        <div class="font-bold text-sm">Shuttle Service</div>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2">
+                                    <div class="text-white text-sm font-semibold">Shuttle Service</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Monitoring & Services -->
+            <div class="space-y-6">
+                <!-- IoT Monitoring -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">📡</span>
+                        Live Monitoring
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="pulse-dot w-3 h-3 bg-green-500 rounded-full mr-3"></span>
+                                <span class="font-semibold">Main Gate</span>
+                            </div>
+                            <span class="text-green-600 font-bold">Normal</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="pulse-dot w-3 h-3 bg-yellow-500 rounded-full mr-3"></span>
+                                <span class="font-semibold">Darshan Hall</span>
+                            </div>
+                            <span class="text-yellow-600 font-bold">Moderate</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="pulse-dot w-3 h-3 bg-red-500 rounded-full mr-3"></span>
+                                <span class="font-semibold">Exit Area</span>
+                            </div>
+                            <span class="text-red-600 font-bold">Crowded</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 p-3 bg-blue-50 rounded-lg">
+                        <div class="text-sm font-semibold text-blue-800">🎥 AI Camera Analysis</div>
+                        <div class="text-xs text-blue-600 mt-1">24 cameras active • Face mask detection ON</div>
+                    </div>
+                </div>
+
+                <!-- Emergency Services -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">🚑</span>
+                        Emergency Services
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <button class="w-full bg-red-500 hover:bg-red-600 text-white p-3 rounded-lg font-semibold transition-colors">
+                            🚨 Report Emergency
+                        </button>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg text-sm transition-colors">
+                                👮 Security
+                            </button>
+                            <button class="bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg text-sm transition-colors">
+                                🏥 Medical
+                            </button>
+                        </div>
+                        
+                        <!-- Emergency Crowd Control Panel -->
+                        <div id="emergencyControlPanel" class="hidden emergency-protocol p-4 rounded-lg text-white">
+                            <div class="text-center mb-3">
+                                <div class="text-lg font-bold">🚨 CROWD SURGE PROTOCOL ACTIVE</div>
+                                <div class="text-xs">Capacity: <span id="currentCapacity">127%</span> | Status: CRITICAL</div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <button id="stopEntryBtn" class="bg-red-700 hover:bg-red-800 p-2 rounded transition-colors">
+                                    🚫 Stop New Entry
+                                </button>
+                                <button id="openExitsBtn" class="bg-orange-600 hover:bg-orange-700 p-2 rounded transition-colors">
+                                    🚪 Open All Exits
+                                </button>
+                                <button id="alertSecurityBtn" class="bg-blue-600 hover:bg-blue-700 p-2 rounded transition-colors">
+                                    👮 Alert Security
+                                </button>
+                                <button id="medicalStandbyBtn" class="bg-green-600 hover:bg-green-700 p-2 rounded transition-colors">
+                                    🏥 Medical Standby
+                                </button>
+                            </div>
+                            <div class="mt-3 text-xs text-center">
+                                <div>Auto-actions: Entry stopped, Exits opened, Security alerted</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="text-sm font-semibold text-gray-700">Medical Stations</div>
+                            <div class="text-xs text-gray-600 mt-1">
+                                • Main Gate: 2 doctors available<br>
+                                • Temple Complex: 1 nurse on duty<br>
+                                • Parking Area: First aid kit
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accessibility Features -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">♿</span>
+                        Accessibility
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <button class="w-full bg-purple-500 hover:bg-purple-600 text-white p-3 rounded-lg font-semibold transition-colors">
+                            🦽 Priority Queue Access
+                        </button>
+                        
+                        <button class="w-full bg-indigo-500 hover:bg-indigo-600 text-white p-3 rounded-lg font-semibold transition-colors">
+                            🗣️ Audio Navigation
+                        </button>
+                        
+                        <div class="bg-purple-50 p-3 rounded-lg">
+                            <div class="text-sm font-semibold text-purple-800">Available Services</div>
+                            <div class="text-xs text-purple-600 mt-1">
+                                • Wheelchair assistance<br>
+                                • Sign language interpreter<br>
+                                • Large print guides<br>
+                                • Dedicated parking spots
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CCTV Sensor Monitoring -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">📹</span>
+                        CCTV Sensor Network
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="text-sm font-semibold text-blue-800">Live Camera Feeds</div>
+                                <div class="text-xs text-blue-600">24 Active</div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                                    <span>Main Gate (4K)</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                                    <span>Darshan Hall (360°)</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span>
+                                    <span>Queue Area (Thermal)</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                                    <span>Parking (Night Vision)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <button id="viewCCTVFeeds" class="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg text-sm transition-colors">
+                                📺 Live Feeds
+                            </button>
+                            <button id="aiAnalysis" class="bg-purple-500 hover:bg-purple-600 text-white p-3 rounded-lg text-sm transition-colors">
+                                🧠 AI Analysis
+                            </button>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="text-sm font-semibold text-gray-700 mb-2">AI Detection Status</div>
+                            <div class="space-y-1 text-xs text-gray-600">
+                                <div class="flex justify-between">
+                                    <span>• Crowd Density Analysis</span>
+                                    <span class="text-green-600">✓ Active</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>• Face Mask Detection</span>
+                                    <span class="text-green-600">✓ Active</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>• Suspicious Activity Alert</span>
+                                    <span class="text-green-600">✓ Active</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>• Emergency Detection</span>
+                                    <span class="text-green-600">✓ Active</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drone Management System -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">🚁</span>
+                        Drone Management
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="text-sm font-semibold text-green-800">Active Drones</div>
+                                <div class="text-xs text-green-600">3 Deployed</div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between text-xs">
+                                    <div class="flex items-center">
+                                        <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                                        <span>Drone Alpha - Perimeter Patrol</span>
+                                    </div>
+                                    <span class="text-green-600">Battery: 87%</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <div class="flex items-center">
+                                        <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
+                                        <span>Drone Beta - Crowd Monitoring</span>
+                                    </div>
+                                    <span class="text-blue-600">Battery: 92%</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <div class="flex items-center">
+                                        <span class="w-2 h-2 bg-orange-500 rounded-full mr-2 animate-pulse"></span>
+                                        <span>Drone Gamma - Emergency Standby</span>
+                                    </div>
+                                    <span class="text-orange-600">Battery: 95%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <button id="deployDrone" class="bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg text-sm transition-colors">
+                                🚁 Deploy Drone
+                            </button>
+                            <button id="droneFeeds" class="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg text-sm transition-colors">
+                                📡 Live Feeds
+                            </button>
+                        </div>
+                        
+                        <div class="bg-purple-50 p-3 rounded-lg">
+                            <div class="text-sm font-semibold text-purple-800 mb-2">Drone Capabilities</div>
+                            <div class="space-y-1 text-xs text-purple-700">
+                                <div>• 4K aerial surveillance & recording</div>
+                                <div>• Real-time crowd density mapping</div>
+                                <div>• Emergency response coordination</div>
+                                <div>• Traffic pattern analysis</div>
+                                <div>• Lost person search assistance</div>
+                                <div>• Weather monitoring sensors</div>
+                            </div>
+                        </div>
+                        
+                        <button id="emergencyDroneDispatch" class="w-full bg-red-500 hover:bg-red-600 text-white p-3 rounded-lg font-semibold transition-colors">
+                            🚨 Emergency Dispatch
+                        </button>
+                        
+                        <!-- Drone Management Image Gallery -->
+                        <div class="mt-6">
+                            <h4 class="font-semibold text-gray-800 mb-4">🖼️ Drone Operations Gallery</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                    <img src="YOUR_DRONE_AERIAL_VIEW_URL_HERE" alt="Aerial Temple View" class="w-full h-40 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="w-full h-40 bg-gradient-to-br from-blue-500 to-purple-600 hidden items-center justify-center text-white">
+                                        <div class="text-center">
+                                            <div class="text-3xl mb-2">🚁</div>
+                                            <div class="font-bold">Aerial Temple View</div>
+                                            <div class="text-sm opacity-90">4K surveillance footage</div>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-3">
+                                        <div class="text-white font-semibold">Aerial Temple View</div>
+                                        <div class="text-white text-sm opacity-90">4K surveillance • Real-time</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                    <img src="YOUR_DRONE_FLEET_URL_HERE" alt="Drone Fleet" class="w-full h-40 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="w-full h-40 bg-gradient-to-br from-green-500 to-teal-600 hidden items-center justify-center text-white">
+                                        <div class="text-center">
+                                            <div class="text-3xl mb-2">🚁</div>
+                                            <div class="font-bold">Drone Fleet</div>
+                                            <div class="text-sm opacity-90">5 active drones</div>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-3">
+                                        <div class="text-white font-semibold">Drone Fleet Management</div>
+                                        <div class="text-white text-sm opacity-90">5 drones • Multi-mission capable</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                                <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                    <img src="YOUR_DRONE_CONTROL_URL_HERE" alt="Control Center" class="w-full h-28 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="w-full h-28 bg-gradient-to-br from-gray-600 to-gray-800 hidden items-center justify-center text-white">
+                                        <div class="text-center">
+                                            <div class="text-xl mb-1">🎮</div>
+                                            <div class="font-bold text-sm">Control Center</div>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2">
+                                        <div class="text-white text-xs font-semibold">Control Center</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                    <img src="YOUR_THERMAL_DRONE_URL_HERE" alt="Thermal Imaging" class="w-full h-28 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="w-full h-28 bg-gradient-to-br from-red-500 to-orange-600 hidden items-center justify-center text-white">
+                                        <div class="text-center">
+                                            <div class="text-xl mb-1">🌡️</div>
+                                            <div class="font-bold text-sm">Thermal Imaging</div>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2">
+                                        <div class="text-white text-xs font-semibold">Thermal Imaging</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                    <img src="YOUR_NIGHT_DRONE_URL_HERE" alt="Night Vision" class="w-full h-28 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="w-full h-28 bg-gradient-to-br from-indigo-600 to-purple-700 hidden items-center justify-center text-white">
+                                        <div class="text-center">
+                                            <div class="text-xl mb-1">🌙</div>
+                                            <div class="font-bold text-sm">Night Vision</div>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2">
+                                        <div class="text-white text-xs font-semibold">Night Vision</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Image Section -->
+            <div class="bg-white rounded-xl p-6 shadow-lg">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <span class="text-2xl mr-3">🖼️</span>
+                    Gallery
+                </h3>
+                <div class="text-center">
+                    <img src="https://i.pinimg.com/736x/be/9f/ef/be9fefcdb6e0782de0eefc8a0f4eac68.jpg" alt="Custom Image" class="w-full max-w-2xl mx-auto rounded-lg shadow-md" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="w-full max-w-2xl mx-auto h-64 bg-gradient-to-br from-blue-400 to-purple-600 hidden items-center justify-center text-white rounded-lg shadow-md">
+                        <div class="text-center">
+                            <div class="text-4xl mb-2">🖼️</div>
+                            <div class="font-bold text-xl">Your Custom Image</div>
+                            <div class="text-sm opacity-90">Replace YOUR_IMAGE_URL_HERE with your image URL</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hindu Festival Calendar -->
+            <div class="bg-white rounded-xl p-6 shadow-lg">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <span class="text-2xl mr-3">📅</span>
+                    Hindu Festival Calendar 2024
+                </h3>
+                
+                <!-- Month Navigation -->
+                <div class="flex items-center justify-between mb-6">
+                    <button id="prevMonth" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        ← Previous
+                    </button>
+                    <h4 id="currentMonth" class="text-lg font-bold text-orange-600">January 2024</h4>
+                    <button id="nextMonth" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        Next →
+                    </button>
+                </div>
+                
+                <!-- Festival List for Current Month -->
+                <div id="festivalList" class="space-y-3 max-h-80 overflow-y-auto">
+                    <!-- Festivals will be populated by JavaScript -->
+                </div>
+                
+                <!-- Quick Festival Search -->
+                <div class="mt-6 flex items-center space-x-3">
+                    <input type="text" id="festivalSearch" placeholder="Search festivals..." 
+                           class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-orange-500">
+                    <button id="searchFestival" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                        🔍 Search
+                    </button>
+                </div>
+                
+                <!-- Festival Categories -->
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <button class="festival-category bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-full text-xs transition-colors" data-category="major">
+                        🎉 Major Festivals
+                    </button>
+                    <button class="festival-category bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded-full text-xs transition-colors" data-category="ekadashi">
+                        🌙 Ekadashi
+                    </button>
+                    <button class="festival-category bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-full text-xs transition-colors" data-category="fasting">
+                        🙏 Fasting Days
+                    </button>
+                    <button class="festival-category bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 py-1 rounded-full text-xs transition-colors" data-category="regional">
+                        🏛️ Regional
+                    </button>
+                    <button class="festival-category bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-1 rounded-full text-xs transition-colors" data-category="all">
+                        📅 All Festivals
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pilgrim Information Panel -->
+        <div class="mt-8 bg-white rounded-xl p-6 shadow-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <span class="text-2xl mr-3">📱</span>
+                Pilgrim Information Center
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="text-center p-4 bg-blue-50 rounded-lg">
+                    <div class="text-2xl mb-2">🕐</div>
+                    <div class="font-semibold text-blue-800">Temple Timings</div>
+                    <div class="text-sm text-blue-600">5:00 AM - 10:00 PM</div>
+                </div>
+                
+                <div class="text-center p-4 bg-green-50 rounded-lg">
+                    <div class="text-2xl mb-2">🍽️</div>
+                    <div class="font-semibold text-green-800">Prasadam</div>
+                    <div class="text-sm text-green-600">Available at counter 3</div>
+                </div>
+                
+                <div class="text-center p-4 bg-yellow-50 rounded-lg">
+                    <div class="text-2xl mb-2">🚻</div>
+                    <div class="font-semibold text-yellow-800">Facilities</div>
+                    <div class="text-sm text-yellow-600">Restrooms, Water, ATM</div>
+                </div>
+                
+                <div class="text-center p-4 bg-purple-50 rounded-lg">
+                    <div class="text-2xl mb-2">📞</div>
+                    <div class="font-semibold text-purple-800">Help Desk</div>
+                    <div class="text-sm text-purple-600">+91-XXXX-XXXX</div>
+                </div>
+            </div>
+            
+            <!-- Additional Services Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-orange-800 mb-3 flex items-center">
+                        <span class="text-xl mr-2">🎯</span>
+                        Quick Services
+                    </h4>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center text-orange-700">
+                            <span class="mr-2">🎫</span>
+                            <span>Online Darshan Booking</span>
+                        </div>
+                        <div class="flex items-center text-orange-700">
+                            <span class="mr-2">🚌</span>
+                            <span>Free Shuttle Service</span>
+                        </div>
+                        <div class="flex items-center text-orange-700">
+                            <span class="mr-2">🅿️</span>
+                            <span>Smart Parking System</span>
+                        </div>
+                        <div class="flex items-center text-orange-700">
+                            <span class="mr-2">♿</span>
+                            <span>Accessibility Support</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-blue-800 mb-3 flex items-center">
+                        <span class="text-xl mr-2">🏛️</span>
+                        Temple Facilities
+                    </h4>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center text-blue-700">
+                            <span class="mr-2">🛍️</span>
+                            <span>Souvenir Shop</span>
+                        </div>
+                        <div class="flex items-center text-blue-700">
+                            <span class="mr-2">📚</span>
+                            <span>Library & Reading Room</span>
+                        </div>
+                        <div class="flex items-center text-blue-700">
+                            <span class="mr-2">🧘</span>
+                            <span>Meditation Hall</span>
+                        </div>
+                        <div class="flex items-center text-blue-700">
+                            <span class="mr-2">🎵</span>
+                            <span>Bhajan Hall</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-green-50 to-teal-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-green-800 mb-3 flex items-center">
+                        <span class="text-xl mr-2">🌟</span>
+                        Special Features
+                    </h4>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center text-green-700">
+                            <span class="mr-2">🤖</span>
+                            <span>AI-Powered Assistance</span>
+                        </div>
+                        <div class="flex items-center text-green-700">
+                            <span class="mr-2">📹</span>
+                            <span>Live CCTV Monitoring</span>
+                        </div>
+                        <div class="flex items-center text-green-700">
+                            <span class="mr-2">🚁</span>
+                            <span>Drone Surveillance</span>
+                        </div>
+                        <div class="flex items-center text-green-700">
+                            <span class="mr-2">📱</span>
+                            <span>Mobile App Integration</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Language Selection -->
+            <div class="flex items-center justify-center space-x-4 mb-6">
+                <span class="font-semibold text-gray-700">Language:</span>
+                <select id="languageSelect" class="border border-gray-300 rounded-lg px-3 py-2 bg-white">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="gu">ગુજરાતી</option>
+                    <option value="mr">मराठी</option>
+                    <option value="ta">தமிழ்</option>
+                </select>
+            </div>
+            
+            <!-- Footer Information -->
+            <div class="border-t border-gray-200 pt-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-3">🏛️ About ARADHYA</h4>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            ARADHYA is Gujarat's most advanced AI-powered pilgrimage management system, designed to enhance your spiritual journey with cutting-edge technology. We ensure safe, comfortable, and meaningful temple visits for millions of devotees.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-3">📞 24/7 Support</h4>
+                        <div class="space-y-2 text-sm text-gray-600">
+                            <div class="flex items-center">
+                                <span class="mr-2">📧</span>
+                                <span>support@aradhya.gov.in</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="mr-2">🌐</span>
+                                <span>www.aradhya-gujarat.gov.in</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="mr-2">📱</span>
+                                <span>Download ARADHYA Mobile App</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 pt-4 border-t border-gray-100 text-center">
+                    <p class="text-xs text-gray-500">
+                        © 2024 ARADHYA - Government of Gujarat. All rights reserved. | 
+                        <span class="text-blue-600">Privacy Policy</span> | 
+                        <span class="text-blue-600">Terms of Service</span> | 
+                        <span class="text-blue-600">Accessibility</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Area -->
+    <div id="notificationArea" class="fixed top-4 right-4 space-y-2 z-50"></div>
+
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 modal">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 max-h-96 overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">👤 Pilgrim Registration</h3>
+                <button id="closeRegistration" class="text-gray-500 hover:text-gray-700">✕</button>
+            </div>
+            
+            <form id="registrationForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
+                    <input type="text" id="regName" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Mobile Number *</label>
+                    <input type="tel" id="regMobile" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Age</label>
+                    <input type="number" id="regAge" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Special Requirements</label>
+                    <select id="regRequirements" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500">
+                        <option value="">None</option>
+                        <option value="wheelchair">Wheelchair Access</option>
+                        <option value="elderly">Elderly Assistance</option>
+                        <option value="medical">Medical Support</option>
+                        <option value="child">Child Care</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-purple-500 hover:bg-purple-600 text-white p-3 rounded-lg font-semibold transition-colors">
+                    Register Now
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Darshan Form Modal -->
+    <div id="darshanModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 modal">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 max-h-96 overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">🎫 Darshan Booking</h3>
+                <button id="closeDarshan" class="text-gray-500 hover:text-gray-700">✕</button>
+            </div>
+            
+            <form id="darshanForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Temple Selection *</label>
+                    <select id="darshanTemple" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500">
+                        <option value="">Select Temple</option>
+                        <option value="somnath">Somnath Temple</option>
+                        <option value="dwarka">Dwarka Temple</option>
+                        <option value="ambaji">Ambaji Temple</option>
+                        <option value="pavagadh">Pavagadh Temple</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Preferred Date *</label>
+                    <input type="date" id="darshanDate" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Time Slot *</label>
+                    <select id="darshanTime" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500">
+                        <option value="">Select Time</option>
+                        <option value="morning">Morning (6:00 AM - 10:00 AM)</option>
+                        <option value="afternoon">Afternoon (10:00 AM - 2:00 PM)</option>
+                        <option value="evening">Evening (2:00 PM - 6:00 PM)</option>
+                        <option value="night">Night (6:00 PM - 10:00 PM)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Number of People</label>
+                    <input type="number" id="darshanPeople" min="1" max="10" value="1" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Darshan Type</label>
+                    <select id="darshanType" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500">
+                        <option value="regular">Regular Darshan (Free)</option>
+                        <option value="vip">VIP Darshan (₹100)</option>
+                        <option value="special">Special Puja (₹500)</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white p-3 rounded-lg font-semibold transition-colors">
+                    Book Darshan Pass
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 modal">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 max-h-96 overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">🔑 Sign In</h3>
+                <button id="closeLogin" class="text-gray-500 hover:text-gray-700">✕</button>
+            </div>
+            
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Email or Mobile *</label>
+                    <input type="text" id="loginEmail" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500" placeholder="Enter email or mobile number">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Password *</label>
+                    <input type="password" id="loginPassword" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500" placeholder="Enter password">
+                </div>
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                        <input type="checkbox" id="rememberMe" class="mr-2">
+                        <span class="text-sm text-gray-600">Remember me</span>
+                    </label>
+                    <button type="button" id="forgotPassword" class="text-sm text-blue-600 hover:text-blue-800">Forgot Password?</button>
+                </div>
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg font-semibold transition-colors">
+                    🔐 Sign In
+                </button>
+                <div class="text-center">
+                    <span class="text-sm text-gray-600">Don't have an account? </span>
+                    <button type="button" id="switchToSignup" class="text-sm text-green-600 hover:text-green-800 font-semibold">Create Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 modal">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 max-h-96 overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">📝 Create Account</h3>
+                <button id="closeSignup" class="text-gray-500 hover:text-gray-700">✕</button>
+            </div>
+            
+            <form id="signupForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
+                    <input type="text" id="signupName" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-green-500" placeholder="Enter full name">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
+                    <input type="email" id="signupEmail" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-green-500" placeholder="Enter email address">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Mobile Number *</label>
+                    <input type="tel" id="signupMobile" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-green-500" placeholder="Enter mobile number">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Password *</label>
+                    <input type="password" id="signupPassword" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-green-500" placeholder="Create password">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Confirm Password *</label>
+                    <input type="password" id="confirmPassword" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-green-500" placeholder="Confirm password">
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="agreeTerms" required class="mr-2">
+                    <span class="text-sm text-gray-600">I agree to the Terms & Conditions and Privacy Policy</span>
+                </div>
+                <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg font-semibold transition-colors">
+                    📝 Create Account
+                </button>
+                <div class="text-center">
+                    <span class="text-sm text-gray-600">Already have an account? </span>
+                    <button type="button" id="switchToLogin" class="text-sm text-blue-600 hover:text-blue-800 font-semibold">Sign In</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Traffic Management Modal -->
+    <div id="trafficModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 modal">
+        <div class="bg-white rounded-xl p-6 max-w-4xl w-full mx-4 max-h-96 overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">🚦 Traffic Management System</h3>
+                <button id="closeTraffic" class="text-gray-500 hover:text-gray-700">✕</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-lg mb-4">🚦 Traffic Signals Status</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-white rounded-lg">
+                            <span class="font-semibold">Main Road Junction</span>
+                            <div class="flex items-center">
+                                <div class="traffic-light green-light"></div>
+                                <span class="text-sm ml-2">GREEN - 45s</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-white rounded-lg">
+                            <span class="font-semibold">Temple Approach</span>
+                            <div class="flex items-center">
+                                <div class="traffic-light red-light"></div>
+                                <span class="text-sm ml-2">RED - 30s</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-white rounded-lg">
+                            <span class="font-semibold">Parking Entry</span>
+                            <div class="flex items-center">
+                                <div class="traffic-light yellow-light"></div>
+                                <span class="text-sm ml-2">YELLOW - 10s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-lg mb-4">🚗 Live Traffic Data</h4>
+                    <div class="space-y-3">
+                        <div class="bg-white p-3 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <span class="font-semibold">Highway to Temple</span>
+                                <span class="text-green-600 font-bold">SMOOTH</span>
+                            </div>
+                            <div class="text-sm text-gray-600">Average speed: 45 km/h</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <span class="font-semibold">Temple Road</span>
+                                <span class="text-yellow-600 font-bold">MODERATE</span>
+                            </div>
+                            <div class="text-sm text-gray-600">Average speed: 25 km/h</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <span class="font-semibold">Parking Areas</span>
+                                <span class="text-red-600 font-bold">CONGESTED</span>
+                            </div>
+                            <div class="text-sm text-gray-600">Average speed: 10 km/h</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-blue-50 p-4 rounded-lg text-center">
+                    <div class="text-2xl mb-2">🚌</div>
+                    <div class="font-semibold text-blue-800">Shuttle Service</div>
+                    <div class="text-sm text-blue-600">Next: 3 minutes</div>
+                    <button class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs transition-colors">
+                        Track Live
+                    </button>
+                </div>
+                
+                <div class="bg-green-50 p-4 rounded-lg text-center">
+                    <div class="text-2xl mb-2">🅿️</div>
+                    <div class="font-semibold text-green-800">Smart Parking</div>
+                    <div class="text-sm text-green-600">57 spots available</div>
+                    <button class="mt-2 bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs transition-colors">
+                        Reserve Spot
+                    </button>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg text-center">
+                    <div class="text-2xl mb-2">🚕</div>
+                    <div class="font-semibold text-purple-800">Taxi Service</div>
+                    <div class="text-sm text-purple-600">12 available nearby</div>
+                    <button class="mt-2 bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded text-xs transition-colors">
+                        Book Taxi
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Chatbot Modal -->
+    <div id="chatbotModal" class="fixed bottom-4 right-4 w-96 h-96 bg-white rounded-xl shadow-2xl hidden flex-col z-50 border border-gray-200">
+        <div class="bg-gradient-to-r from-green-500 to-blue-500 text-white p-4 rounded-t-xl flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="text-2xl">🤖</div>
+                <div>
+                    <div class="font-bold">Temple AI Assistant</div>
+                    <div class="text-xs opacity-90">Online • Ready to help</div>
+                </div>
+            </div>
+            <button id="closeChatbot" class="text-white hover:bg-white hover:bg-opacity-20 p-1 rounded">
+                ✕
+            </button>
+        </div>
+        
+        <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50">
+            <div class="bg-white p-3 rounded-lg shadow-sm">
+                <div class="text-sm text-gray-600 mb-1">AI Assistant</div>
+                <div class="text-gray-800">🙏 Namaste! I'm your temple AI assistant. I can help you with:</div>
+                <div class="text-sm text-gray-600 mt-2">
+                    • Queue status & wait times<br>
+                    • Temple timings & facilities<br>
+                    • Parking & transportation<br>
+                    • Emergency assistance<br>
+                    • Accessibility services<br>
+                    • Registration & booking help
+                </div>
+            </div>
+        </div>
+        
+        <div class="p-4 border-t border-gray-200">
+            <div class="flex space-x-2">
+                <input type="text" id="chatInput" placeholder="Ask me anything about the temple..." 
+                       class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                <button id="sendMessage" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                    Send
+                </button>
+            </div>
+            <div class="flex space-x-2 mt-2">
+                <button class="quick-question bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs transition-colors">
+                    Queue status?
+                </button>
+                <button class="quick-question bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs transition-colors">
+                    Book darshan?
+                </button>
+                <button class="quick-question bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs transition-colors">
+                    Traffic update?
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emergency Contacts Modal -->
+    <div id="emergencyContactsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 modal">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 max-h-96 overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-red-600">📞 Emergency Contacts</h3>
+                <button id="closeEmergencyContacts" class="text-gray-500 hover:text-gray-700">✕</button>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="bg-red-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-red-800 mb-3">🚨 Emergency Services</h4>
+                    <div class="space-y-2">
+                        <button onclick="window.open('tel:108')" class="w-full bg-red-500 hover:bg-red-600 text-white p-3 rounded-lg font-semibold transition-colors text-left">
+                            🚑 Ambulance: 108
+                        </button>
+                        <button onclick="window.open('tel:100')" class="w-full bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg font-semibold transition-colors text-left">
+                            👮 Police: 100
+                        </button>
+                        <button onclick="window.open('tel:101')" class="w-full bg-orange-500 hover:bg-orange-600 text-white p-3 rounded-lg font-semibold transition-colors text-left">
+                            🚒 Fire Brigade: 101
+                        </button>
+                        <button onclick="window.open('tel:102')" class="w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg font-semibold transition-colors text-left">
+                            🏥 Medical Emergency: 102
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-blue-800 mb-3">🏛️ Temple Services</h4>
+                    <div class="space-y-2">
+                        <button onclick="window.open('tel:+919876543210')" class="w-full bg-purple-500 hover:bg-purple-600 text-white p-3 rounded-lg font-semibold transition-colors text-left">
+                            🛡️ Temple Security: +91-98765-43210
+                        </button>
+                        <button onclick="window.open('tel:+919876543211')" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white p-3 rounded-lg font-semibold transition-colors text-left">
+                            ℹ️ Information Desk: +91-98765-43211
+                        </button>
+                        <button onclick="window.open('tel:+919876543212')" class="w-full bg-teal-500 hover:bg-teal-600 text-white p-3 rounded-lg font-semibold transition-colors text-left">
+                            🚌 ARADHYA Transport: +91-98765-43212
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-gray-800 mb-3">🚗 Transportation</h4>
+                    <div class="space-y-2">
+                        <button onclick="window.open('tel:+919876543213')" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white p-3 rounded-lg font-semibold transition-colors text-left">
+                            🚕 Ola Cabs: +91-98765-43213
+                        </button>
+                        <button onclick="window.open('tel:+919876543214')" class="w-full bg-green-600 hover:bg-green-700 text-white p-3 rounded-lg font-semibold transition-colors text-left">
+                            🚖 Local Taxi: +91-98765-43214
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weather Details Modal -->
+    <div id="weatherModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 modal">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 max-h-96 overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-blue-600">🌤️ Weather Forecast</h3>
+                <button id="closeWeather" class="text-gray-500 hover:text-gray-700">✕</button>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-blue-800 mb-3">Current Conditions</h4>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <div class="text-gray-600">Temperature</div>
+                            <div class="font-bold text-blue-800">28°C</div>
+                        </div>
+                        <div>
+                            <div class="text-gray-600">Feels Like</div>
+                            <div class="font-bold text-blue-800">31°C</div>
+                        </div>
+                        <div>
+                            <div class="text-gray-600">Humidity</div>
+                            <div class="font-bold text-blue-800">65%</div>
+                        </div>
+                        <div>
+                            <div class="text-gray-600">Wind Speed</div>
+                            <div class="font-bold text-blue-800">12 km/h</div>
+                        </div>
+                        <div>
+                            <div class="text-gray-600">UV Index</div>
+                            <div class="font-bold text-blue-800">7 (High)</div>
+                        </div>
+                        <div>
+                            <div class="text-gray-600">Visibility</div>
+                            <div class="font-bold text-blue-800">10 km</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-green-800 mb-3">Pilgrimage Recommendations</h4>
+                    <div class="space-y-2 text-sm text-green-700">
+                        <div>☀️ Good weather for temple visit</div>
+                        <div>💧 Carry water bottle (high UV)</div>
+                        <div>👕 Light cotton clothes recommended</div>
+                        <div>🕶️ Sunglasses and hat advised</div>
+                        <div>⏰ Best visit time: 6-9 AM or 6-8 PM</div>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-yellow-800 mb-3">3-Day Forecast</h4>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Today</span>
+                            <span class="text-sm">🌤️ 28°C / 22°C</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Tomorrow</span>
+                            <span class="text-sm">☀️ 30°C / 24°C</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Day After</span>
+                            <span class="text-sm">🌧️ 26°C / 20°C</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Prediction Details Modal -->
+    <div id="aiPredictionModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 modal">
+        <div class="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-purple-600">🧠 AI Crowd Analysis</h3>
+                <button id="closeAIPrediction" class="text-gray-500 hover:text-gray-700">✕</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-purple-800 mb-3">Current Prediction</h4>
+                        <div class="text-2xl font-bold text-purple-600 mb-2">Peak at 2:00 PM</div>
+                        <div class="text-sm text-purple-700">
+                            <div>Confidence: 94%</div>
+                            <div>Expected crowd: 15,000+ people</div>
+                            <div>Wait time: 2-3 hours</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-green-800 mb-3">Best Visit Times</h4>
+                        <div class="space-y-2 text-sm text-green-700">
+                            <div>🌅 6:00-8:00 AM (Low crowd)</div>
+                            <div>🌙 8:30-9:30 PM (Moderate crowd)</div>
+                            <div>📅 Weekdays better than weekends</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-blue-800 mb-3">AI Factors Analyzed</h4>
+                        <div class="space-y-2 text-sm text-blue-700">
+                            <div>📊 Historical crowd patterns</div>
+                            <div>📅 Festival calendar events</div>
+                            <div>🌤️ Weather conditions</div>
+                            <div>🚌 Transportation schedules</div>
+                            <div>📱 Booking trends</div>
+                            <div>🎯 Social media mentions</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-orange-800 mb-3">Smart Recommendations</h4>
+                        <div class="space-y-2 text-sm text-orange-700">
+                            <div>🎫 Book VIP darshan to skip queue</div>
+                            <div>🚌 Use shuttle service (every 15 min)</div>
+                            <div>📱 Enable crowd alerts</div>
+                            <div>⏰ Arrive 30 min before opening</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Analytics Dashboard Modal -->
+    <div id="analyticsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 modal">
+        <div class="bg-white rounded-xl p-6 max-w-4xl w-full mx-4 max-h-96 overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-green-600">📊 Live Analytics Dashboard</h3>
+                <button id="closeAnalytics" class="text-gray-500 hover:text-gray-700">✕</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-blue-50 p-4 rounded-lg text-center">
+                    <div class="text-3xl font-bold text-blue-600">12,847</div>
+                    <div class="text-sm text-blue-700">Total Visitors Today</div>
+                    <div class="text-xs text-blue-600 mt-1">↑ 23% from yesterday</div>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg text-center">
+                    <div class="text-3xl font-bold text-green-600">1,234</div>
+                    <div class="text-sm text-green-700">Currently Inside</div>
+                    <div class="text-xs text-green-600 mt-1">78% capacity</div>
+                </div>
+                <div class="bg-orange-50 p-4 rounded-lg text-center">
+                    <div class="text-3xl font-bold text-orange-600">45 min</div>
+                    <div class="text-sm text-orange-700">Average Wait Time</div>
+                    <div class="text-xs text-orange-600 mt-1">↓ 15 min from peak</div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-gray-800 mb-3">Hourly Visitor Pattern</h4>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">6:00 AM</span>
+                            <div class="flex-1 mx-3 bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 20%"></div>
+                            </div>
+                            <span class="text-sm">234</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">10:00 AM</span>
+                            <div class="flex-1 mx-3 bg-gray-200 rounded-full h-2">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 70%"></div>
+                            </div>
+                            <span class="text-sm">1,456</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">2:00 PM</span>
+                            <div class="flex-1 mx-3 bg-gray-200 rounded-full h-2">
+                                <div class="bg-red-500 h-2 rounded-full" style="width: 100%"></div>
+                            </div>
+                            <span class="text-sm">2,890</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">6:00 PM</span>
+                            <div class="flex-1 mx-3 bg-gray-200 rounded-full h-2">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                            </div>
+                            <span class="text-sm">1,234</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">9:00 PM</span>
+                            <div class="flex-1 mx-3 bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 30%"></div>
+                            </div>
+                            <span class="text-sm">567</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-gray-800 mb-3">Zone-wise Distribution</h4>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-2 bg-white rounded">
+                            <span class="text-sm">Main Darshan Hall</span>
+                            <span class="text-sm font-bold text-red-600">892 people</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-white rounded">
+                            <span class="text-sm">Queue Area</span>
+                            <span class="text-sm font-bold text-yellow-600">247 people</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-white rounded">
+                            <span class="text-sm">Food Court</span>
+                            <span class="text-sm font-bold text-green-600">89 people</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-white rounded">
+                            <span class="text-sm">Parking Areas</span>
+                            <span class="text-sm font-bold text-blue-600">156 people</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emergency Modal -->
+    <div id="emergencyModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <div class="text-center">
+                <div class="text-6xl mb-4">🚨</div>
+                <h3 class="text-2xl font-bold text-red-600 mb-4">Emergency Alert</h3>
+                <p class="text-gray-600 mb-6">Your emergency alert has been sent to security and medical teams. Help is on the way.</p>
+                
+                <div class="space-y-3">
+                    <button onclick="window.open('tel:108')" class="w-full bg-red-500 hover:bg-red-600 text-white p-3 rounded-lg font-semibold transition-colors">
+                        📞 Call Emergency: 108
+                    </button>
+                    <button class="w-full bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg font-semibold transition-colors">
+                        📍 Share Location
+                    </button>
+                    <button id="closeEmergencyModal" class="w-full bg-gray-500 hover:bg-gray-600 text-white p-3 rounded-lg font-semibold transition-colors">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let registeredUsers = [];
+        let darshanBookings = [];
+        let currentSelectedTemple = null;
+        let currentMonthIndex = 0;
+        
+        // Hindu Festival Calendar Data
+        const festivalData = {
+            0: [ // January 2024
+                { date: '1', name: 'New Year', type: 'major', description: 'Gregorian New Year celebration' },
+                { date: '14', name: 'Makar Sankranti', type: 'major', description: 'Harvest festival, kite flying' },
+                { date: '15', name: 'Pongal', type: 'regional', description: 'Tamil harvest festival' },
+                { date: '26', name: 'Republic Day', type: 'national', description: 'National holiday' }
+            ],
+            1: [ // February 2024
+                { date: '8', name: 'Vasant Panchami', type: 'major', description: 'Goddess Saraswati worship' },
+                { date: '14', name: 'Valentine\'s Day', type: 'modern', description: 'Day of love' },
+                { date: '19', name: 'Shivratri', type: 'major', description: 'Lord Shiva worship, fasting' }
+            ],
+            2: [ // March 2024
+                { date: '8', name: 'Holi', type: 'major', description: 'Festival of colors' },
+                { date: '13', name: 'Dhulandi', type: 'major', description: 'Second day of Holi' },
+                { date: '22', name: 'Chaitra Navratri Begins', type: 'major', description: '9-day Goddess worship' }
+            ],
+            3: [ // April 2024
+                { date: '9', name: 'Ram Navami', type: 'major', description: 'Lord Rama\'s birthday' },
+                { date: '13', name: 'Baisakhi', type: 'regional', description: 'Punjabi New Year, harvest festival' },
+                { date: '17', name: 'Hanuman Jayanti', type: 'major', description: 'Lord Hanuman\'s birthday' }
+            ],
+            4: [ // May 2024
+                { date: '12', name: 'Buddha Purnima', type: 'major', description: 'Buddha\'s birthday' },
+                { date: '23', name: 'Akshaya Tritiya', type: 'major', description: 'Auspicious day for new beginnings' }
+            ],
+            5: [ // June 2024
+                { date: '17', name: 'Rath Yatra', type: 'major', description: 'Jagannath chariot festival' }
+            ],
+            6: [ // July 2024
+                { date: '17', name: 'Guru Purnima', type: 'major', description: 'Teacher appreciation day' },
+                { date: '21', name: 'Hariyali Teej', type: 'regional', description: 'Monsoon festival for women' }
+            ],
+            7: [ // August 2024
+                { date: '15', name: 'Independence Day', type: 'national', description: 'National holiday' },
+                { date: '19', name: 'Raksha Bandhan', type: 'major', description: 'Brother-sister bond celebration' },
+                { date: '26', name: 'Janmashtami', type: 'major', description: 'Lord Krishna\'s birthday' }
+            ],
+            8: [ // September 2024
+                { date: '7', name: 'Ganesh Chaturthi', type: 'major', description: 'Lord Ganesha festival' },
+                { date: '16', name: 'Anant Chaturdashi', type: 'major', description: 'Ganesh visarjan' }
+            ],
+            9: [ // October 2024
+                { date: '3', name: 'Navratri Begins', type: 'major', description: '9-day Goddess Durga worship' },
+                { date: '12', name: 'Dussehra', type: 'major', description: 'Victory of good over evil' },
+                { date: '31', name: 'Karva Chauth', type: 'regional', description: 'Fasting for husband\'s long life' }
+            ],
+            10: [ // November 2024
+                { date: '1', name: 'Diwali', type: 'major', description: 'Festival of lights' },
+                { date: '2', name: 'Govardhan Puja', type: 'major', description: 'Krishna lifting Govardhan mountain' },
+                { date: '3', name: 'Bhai Dooj', type: 'major', description: 'Brother-sister celebration' },
+                { date: '15', name: 'Guru Nanak Jayanti', type: 'major', description: 'Sikh Guru\'s birthday' }
+            ],
+            11: [ // December 2024
+                { date: '25', name: 'Christmas', type: 'major', description: 'Christian celebration' },
+                { date: '31', name: 'New Year\'s Eve', type: 'modern', description: 'Year-end celebration' }
+            ]
+        };
+        
+        const monthNames = [
+            'January 2024', 'February 2024', 'March 2024', 'April 2024',
+            'May 2024', 'June 2024', 'July 2024', 'August 2024',
+            'September 2024', 'October 2024', 'November 2024', 'December 2024'
+        ];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTime();
+            setInterval(updateTime, 1000);
+            initializeEventListeners();
+            updateFestivalCalendar();
+            
+            // Set minimum date for darshan booking to today
+            const today = new Date().toISOString().split('T')[0];
+            const darshanDateInput = document.getElementById('darshanDate');
+            if (darshanDateInput) {
+                darshanDateInput.min = today;
+            }
+        });
+
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-IN', { 
+                hour12: true, 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            const currentTimeElement = document.getElementById('currentTime');
+            if (currentTimeElement) {
+                currentTimeElement.textContent = timeString;
+            }
+        }
+
+        // Initialize all event listeners
+        function initializeEventListeners() {
+            // Header buttons
+            document.getElementById('registerBtn')?.addEventListener('click', () => openModal('registrationModal'));
+            document.getElementById('darshanFormBtn')?.addEventListener('click', () => openModal('darshanModal'));
+            document.getElementById('loginBtn')?.addEventListener('click', () => openModal('loginModal'));
+            document.getElementById('trafficBtn')?.addEventListener('click', () => openModal('trafficModal'));
+            document.getElementById('chatbotBtn')?.addEventListener('click', () => toggleChatbot());
+            document.getElementById('emergencyBtn')?.addEventListener('click', () => handleEmergency());
+            document.getElementById('emergencyContactsBtn')?.addEventListener('click', () => openModal('emergencyContactsModal'));
+
+            // Temple selection cards - Open official websites
+            document.querySelectorAll('.temple-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const temple = this.getAttribute('data-temple');
+                    openTempleWebsite(temple);
+                });
+            });
+
+            // Weather widget
+            document.getElementById('weatherWidget')?.addEventListener('click', () => openModal('weatherModal'));
+            
+            // AI Prediction widget
+            document.getElementById('aiPredictionWidget')?.addEventListener('click', () => openModal('aiPredictionModal'));
+            
+            // Live Analytics widget
+            document.getElementById('liveAnalyticsWidget')?.addEventListener('click', () => openModal('analyticsModal'));
+
+            // Queue management buttons
+            document.getElementById('bookDarshanBtn')?.addEventListener('click', () => openModal('darshanModal'));
+            document.getElementById('checkQueueBtn')?.addEventListener('click', () => showNotification('Queue Status: You are #247 in line. Estimated wait: 45 minutes.', 'info'));
+
+            // Transportation buttons
+            document.getElementById('trackAradhyaBus')?.addEventListener('click', () => showNotification('🚌 Next ARADHYA bus arrives in 8 minutes at Gate 1', 'success'));
+            document.getElementById('bookOla')?.addEventListener('click', () => window.open('https://www.olacabs.com', '_blank'));
+            document.getElementById('bookLocalCab')?.addEventListener('click', () => showNotification('📞 Calling local cab service...', 'info'));
+            document.getElementById('callAuto')?.addEventListener('click', () => showNotification('🛺 Auto rickshaw called. Arriving in 5 minutes.', 'success'));
+
+            // CCTV and monitoring buttons
+            document.getElementById('viewCCTVFeeds')?.addEventListener('click', () => showNotification('📹 Opening live CCTV feeds...', 'info'));
+            document.getElementById('aiAnalysis')?.addEventListener('click', () => showNotification('🧠 AI analysis shows normal crowd patterns', 'success'));
+
+            // Drone management buttons
+            document.getElementById('deployDrone')?.addEventListener('click', () => showNotification('🚁 Drone Alpha deployed for perimeter patrol', 'success'));
+            document.getElementById('droneFeeds')?.addEventListener('click', () => showNotification('📡 Opening drone live feeds...', 'info'));
+            document.getElementById('emergencyDroneDispatch')?.addEventListener('click', () => {
+                showNotification('🚨 Emergency drone dispatched! ETA: 2 minutes', 'warning');
+                document.getElementById('emergencyCrowdAlert').classList.remove('hidden');
+                document.getElementById('emergencyControlPanel').classList.remove('hidden');
+            });
+
+            // Emergency control panel buttons
+            document.getElementById('stopEntryBtn')?.addEventListener('click', () => showNotification('🚫 New entry stopped at all gates', 'warning'));
+            document.getElementById('openExitsBtn')?.addEventListener('click', () => showNotification('🚪 All emergency exits opened', 'warning'));
+            document.getElementById('alertSecurityBtn')?.addEventListener('click', () => showNotification('👮 Security teams alerted and deployed', 'warning'));
+            document.getElementById('medicalStandbyBtn')?.addEventListener('click', () => showNotification('🏥 Medical teams on standby', 'warning'));
+
+            // Festival calendar navigation
+            document.getElementById('prevMonth')?.addEventListener('click', () => {
+                currentMonthIndex = Math.max(0, currentMonthIndex - 1);
+                updateFestivalCalendar();
+            });
+            document.getElementById('nextMonth')?.addEventListener('click', () => {
+                currentMonthIndex = Math.min(11, currentMonthIndex + 1);
+                updateFestivalCalendar();
+            });
+
+            // Festival search
+            document.getElementById('searchFestival')?.addEventListener('click', searchFestivals);
+            document.getElementById('festivalSearch')?.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') searchFestivals();
+            });
+
+            // Festival category filters
+            document.querySelectorAll('.festival-category').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    filterFestivals(category);
+                });
+            });
+
+            // Language selection
+            document.getElementById('languageSelect')?.addEventListener('change', function() {
+                showNotification(`Language changed to: ${this.options[this.selectedIndex].text}`, 'success');
+            });
+
+            // Modal close buttons
+            document.querySelectorAll('[id^="close"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const modalId = this.id.replace('close', '').toLowerCase() + 'Modal';
+                    closeModal(modalId);
+                });
+            });
+
+            // Banner close buttons
+            document.getElementById('closeFestivalBanner')?.addEventListener('click', () => {
+                document.getElementById('festivalBanner').style.display = 'none';
+            });
+            document.getElementById('closeEmergencyAlert')?.addEventListener('click', () => {
+                document.getElementById('emergencyCrowdAlert').classList.add('hidden');
+            });
+
+            // Form submissions
+            document.getElementById('registrationForm')?.addEventListener('submit', handleRegistration);
+            document.getElementById('darshanForm')?.addEventListener('submit', handleDarshanBooking);
+            document.getElementById('loginForm')?.addEventListener('submit', handleLogin);
+            document.getElementById('signupForm')?.addEventListener('submit', handleSignup);
+
+            // Auth modal switches
+            document.getElementById('switchToSignup')?.addEventListener('click', () => {
+                closeModal('loginModal');
+                openModal('signupModal');
+            });
+            document.getElementById('switchToLogin')?.addEventListener('click', () => {
+                closeModal('signupModal');
+                openModal('loginModal');
+            });
+
+            // Chatbot functionality
+            document.getElementById('sendMessage')?.addEventListener('click', sendChatMessage);
+            document.getElementById('chatInput')?.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendChatMessage();
+            });
+
+            // Quick question buttons
+            document.querySelectorAll('.quick-question').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const question = this.textContent;
+                    document.getElementById('chatInput').value = question;
+                    sendChatMessage();
+                });
+            });
+
+            // Close modals when clicking outside
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.classList.add('hidden');
+                }
+            });
+        }
+
+        // Open temple official websites
+        function openTempleWebsite(temple) {
+            const websites = {
+                'somnath': 'https://www.somnath.org/',
+                'dwarka': 'https://www.dwarkadhish.org/',
+                'ambaji': 'https://www.ambajimata.com/',
+                'pavagadh': 'https://www.pavagadh.com/'
+            };
+            
+            const url = websites[temple];
+            if (url) {
+                window.open(url, '_blank', 'noopener,noreferrer');
+                showNotification(`🏛️ Opening ${temple.charAt(0).toUpperCase() + temple.slice(1)} Temple official website`, 'info');
+            } else {
+                showNotification('🏛️ Temple website will be available soon', 'info');
+            }
+        }
+
+        // Modal management
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        // Chatbot toggle
+        function toggleChatbot() {
+            const chatbot = document.getElementById('chatbotModal');
+            if (chatbot.classList.contains('hidden')) {
+                chatbot.classList.remove('hidden');
+                chatbot.classList.add('flex');
+            } else {
+                chatbot.classList.add('hidden');
+                chatbot.classList.remove('flex');
+            }
+        }
+
+        // Emergency handler
+        function handleEmergency() {
+            openModal('emergencyModal');
+            showNotification('🚨 Emergency alert sent to security and medical teams!', 'error');
+        }
+
+        // Festival calendar functions
+        function updateFestivalCalendar() {
+            const monthElement = document.getElementById('currentMonth');
+            const festivalListElement = document.getElementById('festivalList');
+            
+            if (monthElement) {
+                monthElement.textContent = monthNames[currentMonthIndex];
+            }
+            
+            if (festivalListElement) {
+                const festivals = festivalData[currentMonthIndex] || [];
+                festivalListElement.innerHTML = '';
+                
+                festivals.forEach(festival => {
+                    const festivalDiv = document.createElement('div');
+                    festivalDiv.className = 'bg-orange-50 p-3 rounded-lg border-l-4 border-orange-400';
+                    festivalDiv.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="font-bold text-orange-800">${festival.name}</div>
+                                <div class="text-sm text-orange-600">${festival.description}</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-lg font-bold text-orange-700">${festival.date}</div>
+                                <div class="text-xs text-orange-600 capitalize">${festival.type}</div>
+                            </div>
+                        </div>
+                    `;
+                    festivalListElement.appendChild(festivalDiv);
+                });
+                
+                if (festivals.length === 0) {
+                    festivalListElement.innerHTML = '<div class="text-center text-gray-500 py-4">No festivals this month</div>';
+                }
+            }
+        }
+
+        function searchFestivals() {
+            const searchTerm = document.getElementById('festivalSearch').value.toLowerCase();
+            if (!searchTerm) return;
+            
+            let found = false;
+            for (let month = 0; month < 12; month++) {
+                const festivals = festivalData[month] || [];
+                const matchingFestival = festivals.find(f => 
+                    f.name.toLowerCase().includes(searchTerm) || 
+                    f.description.toLowerCase().includes(searchTerm)
+                );
+                
+                if (matchingFestival) {
+                    currentMonthIndex = month;
+                    updateFestivalCalendar();
+                    showNotification(`Found: ${matchingFestival.name} in ${monthNames[month]}`, 'success');
+                    found = true;
+                    break;
+                }
+            }
+            
+            if (!found) {
+                showNotification('Festival not found. Try different keywords.', 'warning');
+            }
+        }
+
+        function filterFestivals(category) {
+            // This would filter festivals by category in a real implementation
+            showNotification(`Showing ${category} festivals`, 'info');
+        }
+
+        // Chat functionality
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const messagesContainer = document.getElementById('chatMessages');
+            
+            if (!input.value.trim()) return;
+            
+            // Add user message
+            const userMessage = document.createElement('div');
+            userMessage.className = 'bg-blue-500 text-white p-3 rounded-lg ml-8';
+            userMessage.innerHTML = `
+                <div class="text-xs opacity-75 mb-1">You</div>
+                <div>${input.value}</div>
+            `;
+            messagesContainer.appendChild(userMessage);
+            
+            // Generate AI response
+            const responses = {
+                'queue status': '🎫 Current queue: #247, Wait time: 45 minutes. VIP darshan available with 5-minute wait.',
+                'book darshan': '📱 I can help you book darshan! Please click the "Darshan Form" button in the header to proceed.',
+                'traffic update': '🚦 Current traffic: Main road is smooth, temple approach has moderate traffic. Parking A has 45 spots available.',
+                'temple timings': '🕐 Temple is open from 5:00 AM to 10:00 PM daily. Best visit times: 6-8 AM or 8-9 PM for less crowd.',
+                'parking': '🅿️ Parking A: 45 spots free, Parking B: 12 spots free, Parking C: Full. ARADHYA shuttle available every 15 minutes.',
+                'weather': '🌤️ Current: 28°C, partly cloudy. Good weather for temple visit. Carry water and wear light clothes.',
+                'emergency': '🚨 For emergencies, call 108 (ambulance), 100 (police), or use the Emergency button in the header.',
+                'facilities': '🏛️ Available: Restrooms, water stations, ATM, food court, souvenir shop, medical station, and accessibility support.'
+            };
+            
+            const userQuery = input.value.toLowerCase();
+            let response = 'I can help you with queue status, darshan booking, traffic updates, temple timings, parking, weather, emergencies, and facilities. What would you like to know?';
+            
+            for (const [key, value] of Object.entries(responses)) {
+                if (userQuery.includes(key)) {
+                    response = value;
+                    break;
+                }
+            }
+            
+            // Add AI response
+            setTimeout(() => {
+                const aiMessage = document.createElement('div');
+                aiMessage.className = 'bg-white p-3 rounded-lg shadow-sm mr-8';
+                aiMessage.innerHTML = `
+                    <div class="text-xs text-gray-600 mb-1">AI Assistant</div>
+                    <div class="text-gray-800">${response}</div>
+                `;
+                messagesContainer.appendChild(aiMessage);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 1000);
+            
+            input.value = '';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Form handlers
+        function handleRegistration(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const userData = {
+                name: document.getElementById('regName').value,
+                mobile: document.getElementById('regMobile').value,
+                age: document.getElementById('regAge').value,
+                requirements: document.getElementById('regRequirements').value,
+                id: Date.now()
+            };
+            
+            registeredUsers.push(userData);
+            showNotification('✅ Registration successful! Welcome to ARADHYA.', 'success');
+            closeModal('registrationModal');
+            e.target.reset();
+        }
+
+        function handleDarshanBooking(e) {
+            e.preventDefault();
+            const bookingData = {
+                temple: document.getElementById('darshanTemple').value,
+                date: document.getElementById('darshanDate').value,
+                time: document.getElementById('darshanTime').value,
+                people: document.getElementById('darshanPeople').value,
+                type: document.getElementById('darshanType').value,
+                id: Date.now(),
+                queueNumber: Math.floor(Math.random() * 500) + 1
+            };
+            
+            darshanBookings.push(bookingData);
+            showNotification(`🎫 Darshan booked successfully! Your queue number: #${bookingData.queueNumber}`, 'success');
+            closeModal('darshanModal');
+            e.target.reset();
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            showNotification(`🔐 Welcome back! Logged in as ${email}`, 'success');
+            closeModal('loginModal');
+            e.target.reset();
+        }
+
+        function handleSignup(e) {
+            e.preventDefault();
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showNotification('❌ Passwords do not match!', 'error');
+                return;
+            }
+            
+            const name = document.getElementById('signupName').value;
+            showNotification(`✅ Account created successfully! Welcome ${name}!`, 'success');
+            closeModal('signupModal');
+            e.target.reset();
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notificationArea = document.getElementById('notificationArea');
+            const notification = document.createElement('div');
+            
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                warning: 'bg-yellow-500',
+                info: 'bg-blue-500'
+            };
+            
+            notification.className = `${colors[type]} text-white p-4 rounded-lg shadow-lg notification max-w-sm`;
+            notification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span class="text-sm">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-3 text-white hover:text-gray-200">✕</button>
+                </div>
+            `;
+            
+            notificationArea.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // Close emergency modal
+        document.getElementById('closeEmergencyModal')?.addEventListener('click', () => {
+            closeModal('emergencyModal');
+        });
+
+        // Close weather modal
+        document.getElementById('closeWeather')?.addEventListener('click', () => {
+            closeModal('weatherModal');
+        });
+
+        // Close AI prediction modal
+        document.getElementById('closeAIPrediction')?.addEventListener('click', () => {
+            closeModal('aiPredictionModal');
+        });
+
+        // Close analytics modal
+        document.getElementById('closeAnalytics')?.addEventListener('click', () => {
+            closeModal('analyticsModal');
+        });
+
+        // Close chatbot
+        document.getElementById('closeChatbot')?.addEventListener('click', () => {
+            document.getElementById('chatbotModal').classList.add('hidden');
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'988eb38ff1868ae2',t:'MTc1OTUxODIyNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
